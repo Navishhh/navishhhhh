@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Joe's Birthday Surprise</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: radial-gradient(circle at top left, #ffe0f0, #ffc0cb, #fff0f5);
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+    .floating-heart, .floating-emoji {
+      position: fixed;
+      width: 30px;
+      height: 30px;
+      background-size: contain;
+      animation: floatUp 8s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+      font-size: 24px;
+      text-align: center;
+    }
+    .floating-heart::before {
+      content: '❤️';
+      font-size: 24px;
+      display: block;
+    }
+    .floating-emoji::before {
+      content: '💖';
+      font-size: 24px;
+      display: block;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) scale(1); opacity: 1; }
+      100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+    }
+    .screen {
+      display: none;
+      height: 100vh;
+      width: 100vw;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(8px);
+      transition: all 1s ease-in-out;
+      padding: 20px;
+      animation: fadeIn 1s ease forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .active { display: flex; }
+    .photo-circle {
+      width: 90vw;
+      max-width: 360px;
+      height: 90vw;
+      max-height: 360px;
+      margin: 20px auto;
+      transform-style: preserve-3d;
+      transform: rotateX(0deg) rotateY(0deg);
+      transition: transform 1s ease;
+      position: relative;
+    }
+    .photo-circle img {
+      position: absolute;
+      width: 26vw;
+      max-width: 100px;
+      height: 36vw;
+      max-height: 140px;
+      border-radius: 16px;
+      object-fit: cover;
+      border: 3px solid #ffb6c1;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    #centerText {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #ff1493;
+      text-shadow: 1px 1px 2px #fff;
+      z-index: 2;
+    }
+    #timer {
+      font-size: 4rem;
+      color: white;
+    }
+    .next-button, .back-button, .restart-button, .emoji-button {
+      font-size: 1.2rem;
+      background-color: #ff69b4;
+      color: white;
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .next-button:hover, .back-button:hover, .restart-button:hover, .emoji-button:hover {
+      background: #c71585;
+    }
+    .next-button.photos-btn {
+      position: relative;
+      margin-top: 40px;
+    }
+    #wishText {
+      font-size: 1.2rem;
+      color: #ff007f;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 12px;
+      margin: 20px;
+      box-shadow: 0 0 15px rgba(255,105,180,0.3);
+      transition: all 0.5s ease-in-out;
+    }
+    #loveLetter {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      background: #fff0f5;
+      border-radius: 10px;
+      max-width: 90vw;
+      color: #cc0066;
+      font-size: 1rem;
+      box-shadow: 0 0 20px rgba(255, 192, 203, 0.5);
+      animation: fadeIn 1s ease forwards;
+    }
+  </style>
+</head>
+<body>
+  <audio id="beepSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+  <div id="opening" class="screen active">
+    <h1>Hi Joe 💖</h1>
+    <p>Your surprise is coming in...</p>
+    <h2 id="countdown">10</h2>
+  </div>
+  <div id="wishes" class="screen">
+    <p id="wishText"></p>
+    <button class="next-button" onclick="nextWish()">Next 💌</button>
+  </div>
+  <div id="photos" class="screen">
+    <div class="photo-circle" id="photoCircle">
+      <div id="centerText">🎉 Happy Birthday Joe 🎂💖</div>
+      <img src="D:\movies\503190392_3238090913011314_6919886277873620152_n.jpg" style="top:0; left:50%; transform: translate(-50%, -50%)">
+      <img src="D:\movies\503237223_1862217171239736_5260892680332786070_n.jpg" style="top:50%; left:0; transform: translate(-50%, -50%)">
+      <img src="D:\movies\507947502_647206754991753_3257512840992776001_n.jpg" style="top:100%; left:50%; transform: translate(-50%, -50%)">
+      <img src="D:\movies\507956278_698867886466011_1178451133484366963_n.jpg" style="top:50%; left:100%; transform: translate(-50%, -50%)">
+      <img src="D:\movies\508233350_1144206884179435_5523465806825220_n.jpg" style="top:25%; left:25%; transform: translate(-50%, -50%)">
+      <img src="D:\movies\509609996_2643111849353923_8065713284295851694_n.jpg" style="top:75%; left:75%; transform: translate(-50%, -50%)">
+    </div>
+    <div style="margin-top: 40px;">
+      <button class="next-button photos-btn" onclick="nextScreen('final')">Continue</button>
+    </div>
+  </div>
+  <div id="final" class="screen">
+    <h1>Final Surprise 💝</h1>
+    <p>Thank you for being the most amazing person. I hope this small surprise brought a smile to your face. 😊💕</p>
+    <p>You inspire me to be a better person every day. Your kindness, strength, and joy are truly remarkable. 💫</p>
+    <p>On this special day, I just want to say how grateful I am to know you. 💖</p>
+    <div>
+      <button class="emoji-button" onclick="revealLove()">❤️</button>
+    </div>
+    <button class="restart-button" onclick="location.reload()">🔁 Restart</button>
+    <div id="loveLetter">
+      Dear Joe,<br><br>
+      Enaku ungala romba pidikum but atha epidi sollrathu nu theriala atha ithula soldra Neega annaiku sonningala ellarum cheat pannranga yarum unmaiya illa nu but unmaiya neraiya peru irukhanga neenga tha kandhu pidikanum Naa promise pandra unngaloda passing clouds ah irukha matta i'll be your permanent sky and also The smallest chance of perfect life with you infinitely better than not without you. unagaluku love la interest illa nu therithu athu vara varaikum naa wait pannra and itha note pannikonga ungaluku aga naa eppaiyum irupa don't forget it. that's all.    🌹<br><br>
+      Take care 💖.
+      [Your Secret Admirer 💌]
+    </div>
+  </div>
+  <script>
+    let currentScreen = 'opening';
+    let countdown = 10;
+    const beep = document.getElementById('beepSound');
+    let timer = setInterval(() => {
+      document.getElementById('countdown').textContent = countdown;
+      if (countdown > 0) beep.play();
+      countdown--;
+      if (countdown < 0) {
+        clearInterval(timer);
+        nextScreen('wishes');
+        typeSentence(wishes[wishIndex++]);
+      }
+    }, 1000);
+
+    function nextScreen(id) {
+      document.getElementById(currentScreen).classList.remove('active');
+      document.getElementById(id).classList.add('active');
+      currentScreen = id;
+    }
+
+    const wishes = [
+      "On this special day, I just want to say you're amazing, and you deserve all the happiness in the world! 💕",
+      "May your smile shine brighter than ever today ✨",
+      "You light up every room you walk into 🌟",
+      "You're one in a million, Joe 💖"
+    ];
+    let wishIndex = 0;
+
+    function nextWish() {
+      if (wishIndex < wishes.length) {
+        typeSentence(wishes[wishIndex++]);
+      } else {
+        nextScreen('photos');
+      }
+    }
+
+    function typeSentence(sentence) {
+      const wishText = document.getElementById('wishText');
+      let i = 0;
+      wishText.innerHTML = '';
+      const typer = setInterval(() => {
+        if (i < sentence.length) {
+          wishText.innerHTML += sentence.charAt(i);
+          i++;
+        } else {
+          clearInterval(typer);
+        }
+      }, 40);
+    }
+
+    function revealLove() {
+      document.getElementById('loveLetter').style.display = 'block';
+      for (let i = 0; i < 50; i++) {
+        const x = Math.random();
+        const y = Math.random();
+        confettiLib({ particleCount: 1, angle: 60, spread: 55, origin: { x, y } });
+      }
+    }
+
+    const confettiLib = window.confetti;
+
+    for (let i = 0; i < 30; i++) {
+      const heart = document.createElement('div');
+      heart.classList.add('floating-heart');
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.top = Math.random() * 100 + 'vh';
+      heart.style.animationDuration = (5 + Math.random() * 5) + 's';
+      document.body.appendChild(heart);
+    }
+    for (let i = 0; i < 30; i++) {
+      const emoji = document.createElement('div');
+      emoji.classList.add('floating-emoji');
+      emoji.style.left = Math.random() * 100 + 'vw';
+      emoji.style.top = Math.random() * 100 + 'vh';
+      emoji.style.animationDuration = (5 + Math.random() * 5) + 's';
+      document.body.appendChild(emoji);
+    }
+  </script>
+</body>
+</html>
